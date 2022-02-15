@@ -1,1 +1,0 @@
-web: cd api && nodemon start server.js

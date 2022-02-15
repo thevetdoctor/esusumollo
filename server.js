@@ -4,8 +4,8 @@ const morgan = require('morgan');
 const path = require('path');
 const CORS = require('cors');
 require('dotenv').config();
-const routeHandler = require('./routes/index');
-const db = require('./models/index');
+const routeHandler = require('./api/routes/index');
+const db = require('./api/models/index');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -32,7 +32,6 @@ app.get('/', (req, res) => {
     return res.status(200).json({
         message: 'Welcome to Esusu'
     });
-    // res.sendFile(path.join(__dirname, './ui/build/', 'index.html'));
 });
 
 app.listen(port, () => {
