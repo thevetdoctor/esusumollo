@@ -4,8 +4,8 @@ const morgan = require('morgan');
 const path = require('path');
 const CORS = require('cors');
 require('dotenv').config();
-const routeHandler = require('./api/routes/index');
-const db = require('./api/models/index');
+const routeHandler = require('./routes/index');
+const db = require('./models/index');
 
 const app = express();
 const port = process.env.PORT || 4000;
