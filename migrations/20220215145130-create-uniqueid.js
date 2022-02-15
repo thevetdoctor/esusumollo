@@ -1,21 +1,21 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('members', {
+    await queryInterface.createTable('uniqueids', {
       id: {
         type: Sequelize.UUID,
         defaultValue: new Sequelize.UUIDV4(),
         unique: true,
         primaryKey: true
-      },
+      },    
       groupId: {
         type: Sequelize.UUID,
         allowNull: false
       },
-      status: {
+      text: {
         type: Sequelize.STRING,
-        defaultValue: "active"
-      },   
+        allowNull: false
+      },
       isDeleted: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
@@ -31,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('members');
+    await queryInterface.dropTable('uniqueids');
   }
 };

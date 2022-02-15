@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const GroupController = require('../controllers/GroupController');
+const checkAuth = require('../helpers/auth');
 
-router.post('/', GroupController.createGroup);
-router.get('/', GroupController.getAllGroups);
-router.get('/:userId', GroupController.getGroupsByUserId);
-router.patch('/status/:groupId', GroupController.updateGroupStatus);
-router.patch('/activation/:groupId', GroupController.activateGroup);
+router.post('/', checkAuth, GroupController.createGroup);
+router.get('/', checkAuth, GroupController.getAllGroups);
+router.get('/:userId', checkAuth, GroupController.getGroupsByUserId);
+router.patch('/status/:groupId', checkAuth, GroupController.updateGroupStatus);
+router.patch('/activation/:groupId', checkAuth, GroupController.activateGroup);
 
 module.exports = router;

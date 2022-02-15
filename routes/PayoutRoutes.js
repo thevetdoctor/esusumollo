@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const PayoutController = require('../controllers/PayoutController');
+const checkAuth = require('../helpers/auth');
 
-router.post('/', PayoutController.makePayout);
-router.get('/:payoutId', PayoutController.getPayout);
+router.post('/', checkAuth, PayoutController.makePayout);
+router.get('/:payoutId', checkAuth, PayoutController.getPayout);
 
 module.exports = router;

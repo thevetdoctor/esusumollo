@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class member extends Model {
+  class uniqueid extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,24 +13,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  member.init({
+  uniqueid.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: new DataTypes.UUIDV4(),
       unique: true,
       primaryKey: true
     },    
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false
-    },
     groupId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: false
     },
-    status: {
+    text: {
       type: DataTypes.STRING,
-      defaultValue: "active"
+      allowNull: false
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,
@@ -38,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'member',
+    modelName: 'uniqueid',
   });
-  return member;
+  return uniqueid;
 };
