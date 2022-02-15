@@ -1,32 +1,28 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('groups', {
+    await queryInterface.createTable('payouts', {
       id: {
         type: Sequelize.UUID,
         defaultValue: new Sequelize.UUIDV4(),
         unique: true,
         primaryKey: true
       },    
+      tenureId: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
       userId: {
         type: Sequelize.UUID,
         allowNull: false
       },   
-      name: {
-        type: Sequelize.STRING,
+      amount: {
+        type: Sequelize.FLOAT,
         allowNull: false
       },   
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },   
-      maximumCapacity: {
+      cycle: {
         type: Sequelize.INTEGER,
-        defaultValue: 10
-      },   
-      status: {
-        type: Sequelize.STRING,
-        defaultValue: "public"
+        allowNull: false
       },   
       isDeleted: {
         type: Sequelize.BOOLEAN,
@@ -43,6 +39,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('groups');
+    await queryInterface.dropTable('payouts');
   }
 };

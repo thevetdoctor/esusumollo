@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(CORS());
-app.use(morgan('combined'));
+app.use(morgan('dev'));
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
 

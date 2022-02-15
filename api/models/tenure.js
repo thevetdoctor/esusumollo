@@ -20,17 +20,25 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       primaryKey: true
     },    
-    userId: {
-      type: DataTypes.UUID,
+    name: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     groupId: {
       type: DataTypes.UUID,
       allowNull: false
     },
-    name: {
+    status: {
       type: DataTypes.STRING,
-      allowNull: false
+      defaultValue: "started"
+    },
+    targetAmount: {
+      type: DataTypes.FLOAT,
+      defaultValue: 0.00
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
   }, {
     sequelize,

@@ -32,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: "active"
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
   }, {
     sequelize,
     modelName: 'member',

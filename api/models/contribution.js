@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class group extends Model {
+  class contribution extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,32 +13,28 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  group.init({
+  contribution.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: new DataTypes.UUIDV4(),
       unique: true,
       primaryKey: true
-    },    
+    },
     userId: {
       type: DataTypes.UUID,
       allowNull: false
     },
-    name: {
-      type: DataTypes.STRING,
+    tenureId: {
+      type: DataTypes.UUID,
       allowNull: false
     },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    maximumCapacity: {
+    cycle: {
       type: DataTypes.INTEGER,
-      defaultValue: 10
+      allowNull: false
     },
-    status: {
-      type: DataTypes.STRING,
-      defaultValue: "public"
+    amount: {
+      type: DataTypes.FLOAT,
+      allowNull: false
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,
@@ -46,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'group',
+    modelName: 'contribution',
   });
-  return group;
+  return contribution;
 };

@@ -20,6 +20,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "started"
+      },   
+      targetAmount: {
+        type: Sequelize.FLOAT,
+        defaultValue: 0.00
+      },   
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

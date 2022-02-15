@@ -9,12 +9,17 @@ exports.signUp = async(req, res) => {
     try {
         if(!(email && password && username)) return response(res, 400, null, 'Please supply missing input(s)');
 
+        let user = await Users.findOne({ where: {
+            email
+        }, raw: true});
+        
+        if(user) return response(res, 400, null, 'User already exist');   
         const hash = bcrypt.hashSync(password, 10);
             const newUser = await Users.create({username, email, password: hash});
             newUser.password = null;
             const token = jwt.sign({user: newUser }, process.env.JWT_SECRET);
 
-        response(res, 201, { token, user: newUser }, null, 'Account created');
+        response(res, 201, { token, user: newUser }, null, 'Account created successfully');
     } catch(e) {
         response(res, 500, null, e.message, 'Error in creating user');
     }

@@ -7,18 +7,22 @@ module.exports = {
         defaultValue: new Sequelize.UUIDV4(),
         unique: true,
         primaryKey: true
-      },    
-      userId: {
-        type: Sequelize.UUID,
-        allowNull: false
-      },   
-      groupId: {
-        type: Sequelize.UUID,
-        allowNull: false
       },   
       name: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      groupId: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "active"
+      },   
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,

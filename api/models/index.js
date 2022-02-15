@@ -41,7 +41,6 @@ sequelize.authenticate()
 
 // sequelize.sync({ alter: true }).then(() => {
 //   console.log("DB refreshed");
-//   // return sequelize.drop();
 // });
 
 db.sequelize = sequelize;
@@ -53,7 +52,8 @@ db.user.hasMany(db.group, {
 });
 
 db.group.belongsTo(db.user, {
-  foreignKey: 'userId'
+  foreignKey: 'userId',
+  constraints: false
 });
 
 db.user.belongsToMany(db.group, {
@@ -76,6 +76,30 @@ db.group.hasMany(db.member, {
 db.member.belongsTo(db.group, {
   as: 'groupmembers',
   foreignKey: 'groupId'
+});
+
+db.group.hasMany(db.tenure, {
+  foreignKey: 'groupId'
+});
+
+db.tenure.belongsTo(db.group, {
+  foreignKey: 'groupId'
+});
+
+db.tenure.hasMany(db.contribution, {
+  foreignKey: 'tenureId'
+});
+
+db.contribution.belongsTo(db.tenure, {
+  foreignKey: 'tenureId'
+});
+
+db.tenure.hasMany(db.payout, {
+  foreignKey: 'tenureId'
+});
+
+db.payout.belongsTo(db.tenure, {
+  foreignKey: 'tenureId'
 });
 
 module.exports = db;
