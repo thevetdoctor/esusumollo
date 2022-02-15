@@ -1,1 +1,1 @@
-web: cd api && npm start
+web: cd api && nodemon start server.js
