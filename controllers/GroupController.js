@@ -3,33 +3,34 @@ const Groups = require('../models').group;
 const Members = require('../models').member;
 const Users = require('../models').user;
 const { response } = require('oba-http-response');
-const { getMembers } = require("./MemberController");
+const missingInput = require('../helpers/missingInput');
+const { ErrorClone } = require('../helpers/error');
 
-
-exports.createGroup = async(req, res) => {
-    let { userId, name, description } = req.body;
+exports.createGroup = async(req, res, next) => {
+    const { userId, name, description } = req.body;
     try {
-        if(!(userId && name && description)) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['userId', 'name', 'description'];
+        missingInput(required, req.body);
 
         let group = await Groups.findOne({ where: {
             name
         }, raw: true});
         
-        if(group) return response(res, 400, null, 'Group already exist');
+        if(group) throw new ErrorClone(404, 'Group already exist');
         const newGroup = await Groups.create({userId, name, description});
 
         response(res, 201, { group: newGroup }, null, 'Group created successfully');
     } catch(e) {
-        console.log(e);
-        response(res, 500, null, e.message, 'Error in creating group');
+        next(e);
     }
 }
 
-exports.getAllGroups = async(req, res) => {
+exports.getAllGroups = async(req, res, next) => {
     try {
         let groups = await Groups.findAll({
             where: {
-                status: 'public'
+                status: 'public',
+                isDeleted: false
             },
             include: [
                 {model: Members, as: 'groupmembers'}
@@ -38,14 +39,15 @@ exports.getAllGroups = async(req, res) => {
         
         response(res, 200, groups, null, 'List of groups');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in getting groups');
+       next(e);
     }
 }
 
-exports.getGroupsByUserId = async(req, res) => {
+exports.getGroupsByUserId = async(req, res, next) => {
     const {userId} = req.params;
     try {
-        if(!userId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['userId'];
+        missingInput(required, req.params);
 
         // let groups = await Groups.findAll({
         //     where: {
@@ -58,50 +60,63 @@ exports.getGroupsByUserId = async(req, res) => {
         // });
         
         let groups = await Groups.findAll({
-            include: [
-                {model: Members, as: 'groupmembers',
-                where: {
-                    userId
-                }
-            }
-            ]
+                    where: {isDeleted: false},
+                    include: [
+                                {
+                                    model: Members, as: 'groupmembers',
+                                    where: {
+                                        userId
+                                    },
+                                    attributes: ['id', 'userId', 'status'],
+                                    include: [
+                                            {
+                                                model: Users, 
+                                                as: 'usermembers',
+                                                attributes: ['id', 'username', 'email', 'imageUrl', 'bio', 'location', 'mobile', 'dob']
+                                            }
+                                        ]
+                                }
+                        ]
         });
         
         response(res, 200, groups, null, 'List of user\'s groups');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in getting groups for user');
+        next(e);
     }
 }
 
-exports.updateGroupStatus = async(req, res) => {
+exports.updateGroupStatus = async(req, res, next) => {
     const {groupId} = req.params;
     try {
-        if(!groupId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['groupId'];
+        missingInput(required, req.params);
 
         let group = await Groups.findOne({
             where: {
-                id: groupId
+                id: groupId,
+                isDeleted: false
             },
             include: [
                 {model: Members, as: 'groupmembers'}
             ]
         });
-        if(!group) return response(res, 400, null, 'Group not found');
+        if(!group) throw new ErrorClone(404, 'Group not found');
         if(group.status == 'private') {
-            await Groups.update({status: 'public'}, {where: {id: groupId}});
+            await group.update({status: 'public'});
         } else {
-            await Groups.update({status: 'private'}, {where: {id: groupId}});
+            await group.update({status: 'private'});
         }
         response(res, 200, group, null, 'Group status updated successfully');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in updating group status');
+        next(e);
     }
 }
 
-exports.activateGroup = async(req, res) => {
+exports.activateGroup = async(req, res, next) => {
     const {groupId} = req.params;
     try {
-        if(!groupId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['groupId'];
+        missingInput(required, req.params);
 
         let group = await Groups.findOne({
             where: {
@@ -111,14 +126,14 @@ exports.activateGroup = async(req, res) => {
                 {model: Members, as: 'groupmembers'}
             ]
         });
-        if(!group) return response(res, 400, null, 'Group not found');
+        if(!group) throw new ErrorClone(404, 'Group not found');
         if(group.isDeleted) {
-            await Groups.update({isDeleted: false}, {where: {id: groupId}});
+            await group.update({isDeleted: false});
         } else {
-            await Groups.update({isDeleted: true}, {where: {id: groupId}});
+            await group.update({isDeleted: true});
         }
         response(res, 200, group, null, `Group ${group.isDeleted ? 'deactivated' : 'activated'} successfully`);
     } catch(e) {
-        response(res, 500, null, e.message, `Error in ${group.isDeleted ? 'deactivating' : 'activating'} group`);
+        next(e);
     }
 }

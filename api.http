@@ -1,5 +1,18 @@
-# GET http://localhost:4000/
+GET http://localhost:4000/
 
-# POST http://localhost:4000/auth/signup
+###
+POST http://localhost:4000/auth/signup
 
-POST http://localhost:4000/auth/login
+###
+POST http://localhost:4000/auth/signup
+Content-Type: application/json
+
+{
+    "username" : "oba",
+    "email" : "oba@mollo.com",
+    "password": "pass"
+}
+###
+GET http://localhost:4000/members/join/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncm91cElkIjoiNTRmNWY4NDItM2VhMy00ZGQ1LWIyYTAtODczOTVhMDQ3ZDhlIiwiaWF0IjoxNjQ1MDA1MjYyfQ.Wi4AH_1dPr2UivxrSk8nEeKvXmu8M06KSFU_sDp_5rE
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiOGU1NGEzZGUtMjQyNi00YzY2LThjYTItMTRjNTJjZGQyMWYxIiwidXNlcm5hbWUiOiJvYmEiLCJlbWFpbCI6Im9iYUBtb2xsby5jb20iLCJwYXNzd29yZCI6bnVsbCwiaW1hZ2VVcmwiOm51bGwsImJpbyI6bnVsbCwibG9jYXRpb24iOm51bGwsImRvYiI6bnVsbCwibW9iaWxlIjpudWxsLCJ2ZXJpZmllZCI6ZmFsc2UsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjItMDItMTZUMTI6MzE6MzAuMzAwWiIsInVwZGF0ZWRBdCI6IjIwMjItMDItMTZUMTI6MzE6MzAuMzAwWiJ9LCJpYXQiOjE2NDUwMTQ3ODN9.ajQTkaVngr2EAhEDwAoFcfp7GAHB8L36Oi6-okNO-58
