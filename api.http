@@ -2,4 +2,16 @@
 
 # POST http://localhost:4000/auth/signup
 
-POST http://localhost:4000/auth/login
+# POST http://localhost:4000/auth/login
+
+POST http://localhost:4000/sendMail
+
+###
+
+POST https://nibsssandbackend.innovantics.com/api/v1/auth/password/reset
+Content-Type: application/json
+
+{
+    "email": "obafemi.oderanti@innovantics.com",
+    "type": "admin"
+}
