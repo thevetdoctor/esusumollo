@@ -11,7 +11,6 @@ ENV DB_PASS=obapass1
 ENV DB_NAME=postgres
 ENV DB_HOST=localhost
 ENV DB_PORT=5432
-# ENV SENDGRID_API_KEY=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
 
 # run env variables
 RUN env
