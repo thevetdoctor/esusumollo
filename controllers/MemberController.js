@@ -2,50 +2,61 @@ const {Sequelize, Op} = require("sequelize");
 const jwt = require('jsonwebtoken');
 const Groups = require('../models').group;
 const Members = require('../models').member;
+const Users = require('../models').user;
 const UniqueIds = require('../models').uniqueid;
 const { response } = require('oba-http-response');
+const missingInput = require('../helpers/missingInput');
+const { ErrorClone } = require('../helpers/error');
 
-
-exports.addMember = async(req, res) => {
-    let { userId, groupId } = req.body;
+exports.addMember = async(req, res, next) => {
+    let { newUserId, groupId } = req.body;
     try {
-        if(!(userId && groupId)) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['newUserId', 'groupId'];
+        missingInput(required, req.body);
 
         let member = await Members.findOne({ where: {
-            userId,
+            userId: newUserId,
             groupId
         }, raw: true});
         
-        if(member) return response(res, 400, null, 'Member already exist');
-        const newMember = await Members.create({userId, groupId});
+        if(member) throw new ErrorClone(404, 'Member already exist');
+        const newMember = await Members.create({userId: newUserId, groupId});
 
         response(res, 201, { member: newMember }, null, 'Member added successfully');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in adding a member');
+        next(e);
     }
 }
 
-exports.getMembers = async(req, res) => {
+exports.getMembers = async(req, res, next) => {
     const {groupId} = req.params;
     try {
-        if(!groupId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['groupId'];
+        missingInput(required, req.params);
 
-        let groupMembers = await Members.findAll({where: {groupId}});
+        let groupMembers = await Members.findAll({
+            where: {groupId},
+            attributes: ['id', 'userId', 'status'],
+            include: [
+                {model: Users, as: 'usermembers',
+                attributes: ['id', 'username', 'email', 'imageUrl', 'bio', 'location', 'mobile', 'dob']}
+            ]});
         
-        response(res, 200, groupMembers, null, 'List of group members');
+        response(res, 200, groupMembers, null, 'List of group members'); 
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in getting group members');
+        next(e);
     }
 }
 
-exports.generateUniqueIDToAddMember = async(req, res) => {
+exports.generateUniqueIDToAddMember = async(req, res, next) => {
     let { groupId } = req.body;
     try {
-        if(!groupId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['groupId'];
+        missingInput(required, req.body);
         
         const group = await Groups.findByPk(groupId);
         
-        if(!group) return response(res, 400, null, 'Group not found');
+        if(!group) throw new ErrorClone(404, 'Group not found');
 
         // expiry time could be added to the uniqueID
         const uniqueID = jwt.sign({groupId}, process.env.JWT_SECRET);
@@ -54,45 +65,53 @@ exports.generateUniqueIDToAddMember = async(req, res) => {
 
         response(res, 201, { uniqueID }, null, 'UniqueID generated');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in generating uniqueID');
+        next(e);
     }
 }
 
-exports.addMemberByUniqueId = async(req, res) => {
+exports.addMemberByUniqueId = async(req, res, next) => {
     let { userId } = req.body;
     let { uniqueId } = req.params;
     try {
-        if(!uniqueId) return response(res, 400, null, 'UniqueID not supplied');
+        const required = ['userId', 'uniqueId'];
+        missingInput(required, {...req.params, ...req.body});
+        
         const uniqueIdExist = await UniqueIds.findOne({
             where: {
                 text: uniqueId
             }
         });
-        if(!uniqueIdExist) return response(res, 400, null, 'UniqueID not found in record');
+        if(!uniqueIdExist) throw new ErrorClone(404, 'UniqueID not found in record');
+        
         
         jwt.verify(uniqueId, process.env.JWT_SECRET, async(error, data) => {
-            if(error) {
-                console.log(error.message)
-                return response(res, 400, null, 'ID verification Failed');
-            }
-            if(data) {
-                const groupId = data.groupId;
-                const group = await Groups.findByPk(groupId);
-                if(!group) return response(res, 400, null, 'Group not found');
-
-                let member = await Members.findOne({ where: {
-                    userId,
-                    groupId
-                }, raw: true});
-                
-                if(member) return response(res, 400, null, 'Member already exist');
-                const newMember = await Members.create({userId, groupId});
-        
-                response(res, 201, { member: newMember }, null, 'Member added successfully');
+            try{
+                if(error) {
+                    throw new ErrorClone(403, 'ID verification Failed');
+                }
+                if(data) {
+                    const groupId = data.groupId;
+                    const group = await Groups.findByPk(groupId);
+                    if(!group) throw new ErrorClone(404, 'Group not found');
+    
+                    let member = await Members.findOne({ where: {
+                        userId,
+                        groupId
+                    }, raw: true});
+                    
+                    if(member) {
+                        throw new ErrorClone(404, 'Member already exist');
+                    }
+                    const newMember = await Members.create({userId, groupId});
+            
+                    response(res, 201, { member: newMember }, null, 'Member added successfully');
+                }
+            } catch(err) {
+                next(err);
             }
         });
 
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in generating uniqueID');
+        next(e);
     }
 }

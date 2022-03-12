@@ -1,38 +1,41 @@
 const {Sequelize, Op} = require("sequelize");
 const Tenures = require('../models').tenure;
 const { response } = require('oba-http-response');
+const missingInput = require('../helpers/missingInput');
+const { ErrorClone } = require('../helpers/error');
 
-
-exports.createTenure = async(req, res) => {
+exports.createTenure = async(req, res, next) => {
     let { name, groupId } = req.body;
     try {
-        if(!(name && groupId)) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['name', 'groupId'];
+        missingInput(required, req.body);
 
         let tenure = await Tenures.findOne({ where: {
             name,
             groupId
         }, raw: true});
         
-        if(tenure) return response(res, 400, null, 'Tenure already exist');
+        if(tenure) throw new ErrorClone(404, 'Tenure already exist');
         const newTenure = await Tenures.create({name, groupId});
 
         response(res, 201, { tenure: newTenure }, null, 'Tenure created successfully');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in creating tenure');
+        next(e);
     }
 }
 
-exports.getTenure = async(req, res) => {
+exports.getTenure = async(req, res, next) => {
     const {tenureId} = req.params;
     try {
-        if(!tenureId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['tenureId'];
+        missingInput(required, req.params);
 
         let tenure = await Tenures.findByPk(tenureId);
-        if(!tenure) return response(res, 400, null, 'Tenure not found');
+        if(!tenure) throw new ErrorClone(404, 'Tenure not found');
         
         response(res, 200, tenure, null, 'Tenure details');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in getting tenure details');
+       next(e);
     }
 }
 

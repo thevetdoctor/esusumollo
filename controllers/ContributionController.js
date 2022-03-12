@@ -1,12 +1,14 @@
 const {Sequelize, Op} = require("sequelize");
 const Contributions = require('../models').contribution;
 const { response } = require('oba-http-response');
+const missingInput = require('../helpers/missingInput');
+const { ErrorClone } = require('../helpers/error');
 
-
-exports.makeContribution = async(req, res) => {
+exports.makeContribution = async(req, res, next) => {
     let { userId, tenureId, amount, cycle } = req.body;
     try {
-        if(!(userId && tenureId && amount && cycle)) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['userId', 'tenureId', 'amount', 'cycle'];
+        missingInput(required, req.body);
 
         let contribution = await Contributions.findOne({ where: {
             userId,
@@ -14,26 +16,27 @@ exports.makeContribution = async(req, res) => {
             cycle
         }, raw: true});
         
-        if(contribution) return response(res, 400, null, 'Contribution already made');
+        if(contribution) throw new ErrorClone(404, 'Contribution already made');
         const newContribution = await Contributions.create({userId, tenureId, amount, cycle});
 
         response(res, 201, { contribution: newContribution }, null, 'Contribution made successfully');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in making contribution');
+        next(e);
     }
 }
 
-exports.getContribution = async(req, res) => {
+exports.getContribution = async(req, res, next) => {
     const {contributionId} = req.params;
     try {
-        if(!contributionId) return response(res, 400, null, 'Please supply missing input(s)');
+        const required = ['contributionId'];
+        missingInput(required, req.params);
 
         let contribution = await Contributions.findByPk(contributionId);
-        if(!contribution) return response(res, 400, null, 'Contribution not found');
+        if(!contribution) throw new ErrorClone(404, 'Contribution not found');
         
         response(res, 200, contribution, null, 'Contribution details');
     } catch(e) {
-        response(res, 500, null, e.message, 'Error in getting contribution details');
+        next(e);
     }
 }
 

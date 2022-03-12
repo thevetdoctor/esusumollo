@@ -7,7 +7,8 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
-console.log(config)
+console.log(config.host, env)
+const { ErrorClone } = require('../helpers/error');
 
 let sequelize;
 if (config.use_env_variable) {
@@ -34,10 +35,11 @@ Object.keys(db).forEach(modelName => {
 
 sequelize.authenticate()
 .then(()=>{
-  console.log('Connection to database establised');
+  console.log(`Connection to database establised`);
 }) 
 .catch(err => {
-  console.error(`Unable to connect to database:`, err);
+  console.error(`Unable to connect to database:`, err.message);
+  throw new ErrorClone(404, 'Server connection error');
 });
 
 // sequelize.sync({ alter: true }).then(() => {
@@ -77,6 +79,16 @@ db.group.hasMany(db.member, {
 db.member.belongsTo(db.group, {
   as: 'groupmembers',
   foreignKey: 'groupId'
+});
+
+db.user.hasMany(db.member, {
+  as: 'usermembers',
+  foreignKey: 'userId'
+});
+
+db.member.belongsTo(db.user, {
+  as: 'usermembers',
+  foreignKey: 'userId'
 });
 
 db.group.hasMany(db.tenure, {
