@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  app:
+    image: node:12-alpine
+    command: sh -c "npm install && npm start"
+    ports:
+      - 4000:4000
+    working_dir: /
+    volumes:
+      - ./:/
+    environment:       
+      DB_SERVER: localhost
+      DB_USER: oba
+      DB_PASSWORD: obapass1
+      DATABASE: esusumollo
+      DB_PORT: 5432
+      REQUEST_TIMEOUT: 10000
+      CONNECTION_TIMEOUT: 20000
+    depends_on:
+      - pg-db
+  
+  #PostgreSQL container
+  pg-db:
+    container_name: postgre_db
+    image: postgres #Using the official docker image for postgresql
+    command: sh -c "create db"
+    volumes: 
+      - pg_data:/var/lib/postgresql/data/
+    environment: 
+      - POSTGRES_DB=esusumollo
+      - POSTGRES_USER=oba
+      - POSTGRES_PASSWORD=obapass1
+      - PGDATA:/var/lib/postgresql/data
+    # env_file:
+    #   - ./env_files/pg-db.env #ALl postgresql connection variables are stored here
+
+  #Nginx container
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports: 
+      - 1337:80
+    depends_on:
+      - app
+
+volumes:
+  pg_data:
