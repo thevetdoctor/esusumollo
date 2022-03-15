@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class tenure extends Model {
     /**
@@ -12,33 +13,33 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
+  }
   tenure.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: new DataTypes.UUIDV4(),
       unique: true,
-      primaryKey: true
-    },    
+      primaryKey: true,
+    },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     groupId: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: "started"
+      defaultValue: 'started',
     },
     targetAmount: {
       type: DataTypes.FLOAT,
-      defaultValue: 0.00
+      defaultValue: 0.00,
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: false,
     },
   }, {
     sequelize,

@@ -11,7 +11,7 @@ services:
       - ./:/
     environment:       
       DB_SERVER: localhost
-      DB_USER: oba
+      DB_USER: postres
       DB_PASSWORD: obapass1
       DATABASE: esusumollo
       DB_PORT: 5432
@@ -29,7 +29,7 @@ services:
       - pg_data:/var/lib/postgresql/data/
     environment: 
       - POSTGRES_DB=esusumollo
-      - POSTGRES_USER=oba
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=obapass1
       - PGDATA:/var/lib/postgresql/data
     # env_file:

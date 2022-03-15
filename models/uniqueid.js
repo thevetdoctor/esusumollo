@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class uniqueid extends Model {
     /**
@@ -12,25 +13,25 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
+  }
   uniqueid.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: new DataTypes.UUIDV4(),
       unique: true,
-      primaryKey: true
-    },    
+      primaryKey: true,
+    },
     groupId: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     text: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: false,
     },
   }, {
     sequelize,

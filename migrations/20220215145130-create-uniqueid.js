@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('uniqueids', {
@@ -6,31 +6,31 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: new Sequelize.UUIDV4(),
         unique: true,
-        primaryKey: true
-      },    
+        primaryKey: true,
+      },
       groupId: {
         type: Sequelize.UUID,
-        allowNull: false
+        allowNull: false,
       },
       text: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       isDeleted: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('uniqueids');
-  }
+  },
 };

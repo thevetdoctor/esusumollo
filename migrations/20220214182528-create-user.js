@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users', {
@@ -6,25 +6,25 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: new Sequelize.UUIDV4(),
         unique: true,
-        primaryKey: true
-      },    
+        primaryKey: true,
+      },
       username: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
         validate: {
-          isEmail: true
+          isEmail: true,
         },
         unique: {
           args: true,
-          msg: "Email address already in use!"
-        }
+          msg: 'Email address already in use!',
+        },
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       imageUrl: {
         type: Sequelize.STRING,
@@ -43,23 +43,23 @@ module.exports = {
       },
       verified: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       isDeleted: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('users');
-  }
+  },
 };

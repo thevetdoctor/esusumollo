@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const PayoutController = require('../controllers/PayoutController');
 const checkAuth = require('../helpers/auth');
