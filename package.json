@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon start server.js",
     "prestart": "npm run migrate",
-    "migrate": "./node_modules/.bin/sequelize db:migrate",
+    "migrate": "npx sequelize db:migrate",
     "test": "jest --coverage"
   },
   "keywords": [
