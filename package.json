@@ -5,7 +5,6 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon start server.js",
-    "prestart": "npm run migrate",
     "migrate": "./node_modules/.bin/sequelize db:migrate",
     "dev": "SET NODE_ENV=test&& nodemon start server.js",
     "test": "jest --coverage"
