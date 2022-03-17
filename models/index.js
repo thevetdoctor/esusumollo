@@ -9,7 +9,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(`${__dirname}/../config/config.js`)[env];
 const db = {};
-console.log(process.env.NODE_ENV, config);
+console.log('NODE_ENV: ', process.env.NODE_ENV, 'HOST: ', config.host);
 const { ErrorClone } = require('../helpers/error');
 
 let sequelize;
