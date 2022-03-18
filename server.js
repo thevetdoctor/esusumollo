@@ -3,6 +3,7 @@
 const express = require('express');
 const parser = require('body-parser');
 const morgan = require('morgan');
+const { Address6 } = require('ip-address');
 const CORS = require('cors');
 require('dotenv').config();
 const routeHandler = require('./routes/index');
@@ -18,9 +19,16 @@ app.use(parser.urlencoded({ extended: false }));
 
 routeHandler(app);
 
-app.get('/', (req, res) => res.status(200).json({
-  message: 'Welcome to Esusu',
-}));
+app.get('/', (req, res) => {
+  console.log(req.socket.remoteAddress, req.ip, req.socket.localAddress);
+  const address = new Address6(req.socket.remoteAddress);
+  console.log(address.inspectTeredo().client4);
+
+  res.status(200).json({
+    message: 'Welcome to Esusu',
+    ipaddress: address.inspectTeredo().client4
+  });
+});
 
 // Handle unhandledRejection error
 process.on('unhandledRejection', (error) => {

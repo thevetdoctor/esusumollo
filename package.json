@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon start server.js",
     "prestart": "npm run migrate",
-    "migrate": "npx sequelize db:migrate",
+    "migrate": "npx sequelize-cli db:migrate",
     "test": "jest --coverage"
   },
   "keywords": [
@@ -24,8 +24,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
+    "ip-address": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "oba-http-response": "^1.0.1",
     "oba-random-id": "^1.0.3",

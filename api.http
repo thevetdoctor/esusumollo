@@ -15,7 +15,7 @@ POST https://nibsssandbackend.innovantics.com/api/v1/auth/password/reset
 Content-Type: application/json
 
 {
-    "email": "obafemi.oderanti@innovantics.com",
+    "email": "thevetdoctor@gmail.com",
     "type": "admin"
 }
 ###

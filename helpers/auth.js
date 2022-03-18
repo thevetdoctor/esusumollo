@@ -1,13 +1,19 @@
 /* eslint-disable consistent-return */
 const { config } = require('dotenv');
 const jwt = require('jsonwebtoken');
+const { Address6 } = require('ip-address');
 const { response } = require('oba-http-response');
 
 config();
 
+
 const { JWT_SECRET } = process.env;
 
 module.exports = async (req, res, next) => {
+  console.log(req.socket.remoteAddress, req.ip, req.socket.localAddress);
+  const address = new Address6(req.socket.remoteAddress);
+  console.log(address.inspectTeredo().client4);
+
   const { authorization } = req.headers;
 
   if (typeof authorization !== 'undefined') {
