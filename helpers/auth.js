@@ -1,11 +1,11 @@
 /* eslint-disable consistent-return */
+/* eslint-disable no-console */
 const { config } = require('dotenv');
 const jwt = require('jsonwebtoken');
 const { Address6 } = require('ip-address');
 const { response } = require('oba-http-response');
 
 config();
-
 
 const { JWT_SECRET } = process.env;
 

@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 const { Router } = require('express');
 
 const router = Router();
@@ -25,14 +26,14 @@ const sendmail = {
     try {
       const required = ['from', 'to', 'subject', 'message'];
       missingInput(required, req.body);
-    
+
       await transport.sendMail(msg, (err, info) => {
         if (err) {
-          console.error("Sending mail failed");
+          console.error('Sending mail failed');
           console.error(err);
         } else {
           // console.info(info);
-          console.info("Mail Sent Successfully");
+          console.info('Mail Sent Successfully');
         }
       });
 

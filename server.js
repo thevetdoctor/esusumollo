@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
   res.status(200).json({
     message: 'Welcome to Esusu',
-    ipaddress: address.inspectTeredo().client4
+    ipaddress: address.inspectTeredo().client4,
   });
 });
 
