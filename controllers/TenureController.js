@@ -5,7 +5,7 @@ const missingInput = require('../helpers/missingInput');
 const { ErrorClone } = require('../helpers/error');
 
 exports.createTenure = async (req, res, next) => {
-  const { name, groupId } = req.body;
+  const { name, userId, groupId } = req.body;
   try {
     const required = ['name', 'groupId'];
     missingInput(required, req.body);
@@ -13,13 +13,14 @@ exports.createTenure = async (req, res, next) => {
     const tenure = await Tenures.findOne({
       where: {
         name,
+        userId,
         groupId,
       },
       raw: true,
     });
 
     if (tenure) throw new ErrorClone(404, 'Tenure already exist');
-    const newTenure = await Tenures.create({ name, groupId });
+    const newTenure = await Tenures.create({ name, userId, groupId });
 
     response(res, 201, { tenure: newTenure }, null, 'Tenure created successfully');
   } catch (e) {

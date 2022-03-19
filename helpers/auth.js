@@ -10,14 +10,13 @@ config();
 const { JWT_SECRET } = process.env;
 
 module.exports = async (req, res, next) => {
-  console.log(req.socket.remoteAddress, req.ip, req.socket.localAddress);
   const address = new Address6(req.socket.remoteAddress);
   console.log(address.inspectTeredo().client4);
 
   const { authorization } = req.headers;
 
   if (typeof authorization !== 'undefined') {
-    const [, token] = authorization.split(' ')[1];
+    const token = authorization.split(' ')[1];
     req.token = token;
 
     jwt.verify(req.token, JWT_SECRET, (error, auth) => {

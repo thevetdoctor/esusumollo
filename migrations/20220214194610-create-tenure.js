@@ -8,16 +8,16 @@ module.exports = {
         unique: true,
         primaryKey: true,
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       userId: {
         type: Sequelize.UUID,
         allowNull: false,
       },
       groupId: {
         type: Sequelize.UUID,
-        allowNull: false,
-      },
-      name: {
-        type: Sequelize.STRING,
         allowNull: false,
       },
       status: {
