@@ -37,7 +37,7 @@ jobs:
         port: ${{ secrets.PORT }}
         # script: whoami
         script: |
-          cd ~/publish
+          cd ~/
           docker-compose stop esusumollo:latest
           docker-compose pull esusumollo:latest
           docker-compose up -d
