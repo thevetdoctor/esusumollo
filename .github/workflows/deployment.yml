@@ -17,7 +17,8 @@ jobs:
       uses: actions/checkout@v2
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag esusumollo:$(date +%s)
+      # run: docker build . --file Dockerfile --tag esusumollo:$(date +%s)
+      run: docker build . --file Dockerfile --tag esusumollo:latest
     
     - name: Build and Push Docker Image
       uses: mr-smithers-excellent/docker-build-push@v4
