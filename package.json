@@ -26,6 +26,7 @@
     "express": "^4.17.2",
     "ip-address": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
+    "kafkajs": "^1.16.0",
     "morgan": "^1.10.0",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
@@ -33,6 +34,7 @@
     "oba-random-id": "^1.0.3",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
+    "redis": "^4.1.0",
     "sequelize": "^6.17.0"
   },
   "devDependencies": {

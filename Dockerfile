@@ -6,9 +6,9 @@ WORKDIR /
 
 # set env variables
 ENV JWT_SECRET=secret
-ENV DB_USER=postgres
-ENV DB_PASS=obapass1
-ENV DB_NAME=postgres
+ENV DB_USER=admin
+ENV DB_PASS=strange
+ENV DB_NAME=esusudb
 ENV DB_HOST=localhost
 ENV DB_PORT=5432
 

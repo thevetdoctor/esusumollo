@@ -4,7 +4,7 @@
 const { Router } = require('express');
 
 const router = Router();
-const sgMail = require('@sendgrid/mail');
+// const sgMail = require('@sendgrid/mail');
 const { response } = require('oba-http-response');
 const missingInput = require('../helpers/missingInput');
 const transport = require('../helpers/mail');
@@ -15,7 +15,7 @@ const sendmail = {
       from, to, subject, message,
     } = req.body;
 
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       from,
       to,
@@ -37,15 +37,15 @@ const sendmail = {
         }
       });
 
-      sgMail
-        .send(msg)
-        .then(() => {}, (error) => {
-          console.error('error', error.message);
+      // sgMail
+      //   .send(msg)
+      //   .then(() => {}, (error) => {
+      //     console.error('error', error.message);
 
-          if (error.response) {
-            return response(res, error.statusCode, null, error.message, 'Error in sending mail');
-          }
-        });
+      //     if (error.response) {
+      //       return response(res, error.statusCode, null, error.message, 'Error in sending mail');
+      //     }
+      //   });
       return response(res, 200, {}, null, `Mail sent to ${to}`);
     } catch (e) {
       response(res, 500, null, e.message, 'Server error');

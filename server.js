@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 const express = require('express');
@@ -6,8 +7,18 @@ const morgan = require('morgan');
 const { Address6 } = require('ip-address');
 const CORS = require('cors');
 require('dotenv').config();
-const routeHandler = require('./routes/index');
 // const db = require('./models/index');
+// const redis = require('redis');
+
+// const subscriber = redis.createClient({
+//   url: 'redis://:p20ca83c7c11773fba509b0f2757c51ba516ac591b17ffbc0713eaa1eca229c07@ec2-3-232-215-103.compute-1.amazonaws.com:21080',
+// });
+// const publisher = redis.createClient({
+//   url: 'redis://:p20ca83c7c11773fba509b0f2757c51ba516ac591b17ffbc0713eaa1eca229c07@ec2-3-232-215-103.compute-1.amazonaws.com:21080',
+// });
+// eslint-disable-next-line import/extensions
+require('./helpers/kafka.js');
+const routeHandler = require('./routes/index');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,6 +27,16 @@ app.use(CORS());
 app.use(morgan('dev'));
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
+
+async function noderedis() {
+  await client.connect();
+
+  await subscriber.subscribe('dogs', (message) => {
+    console.log(channel, message);
+  });
+
+  publisher.publish('dogs', 'Roger');
+}
 
 routeHandler(app);
 
