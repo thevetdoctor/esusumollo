@@ -38,8 +38,8 @@ jobs:
         # script: whoami
         script: |
           cd ~/
-          docker-compose stop esusumollo:latest
-          docker-compose pull esusumollo:latest
+          docker-compose stop esusu_backend
+          docker-compose pull esusu_backend
           docker-compose up -d
           exit
 
